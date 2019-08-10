@@ -72,6 +72,33 @@
 
   // TODO: your code goes here :)
 
+  $('#generateDoggoBtn').click(clickDoggoBtn)
+
+  function fetchDoggoSuccess(doggo){
+    console.log("Doggo was fetched successfully")
+    console.log(doggo)
+    $('#doggoContainer').append(`<img src="${doggo.message}">`)
+
+  }
+
+  function fetchDoggoError(error){
+    console.log("Doggo fetch failed")
+    console.log(error)
+  }
+
+  function clickDoggoBtn(){
+
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: "https://dog.ceo/api/breeds/image/random",
+      success: fetchDoggoSuccess,
+      error: fetchDoggoError
+    })
+    
+  }
+
+
   //
   // Cool. Now let's kick it up a notch and allow selecting a specific breed of dog!
   //
