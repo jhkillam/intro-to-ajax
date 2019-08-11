@@ -73,12 +73,20 @@
   // TODO: your code goes here :)
 
   $('#generateDoggoBtn').click(clickDoggoBtn)
+  let generateDoggoBtn = document.getElementById("generateDoggoBtn")
+  let doggoContainer = document.getElementById("doggoContainer")
 
   function fetchDoggoSuccess(doggo){
     console.log("Doggo was fetched successfully")
     console.log(doggo)
-    $('#doggoContainer').append(`<img src="${doggo.message}">`)
 
+    // this approach continually adds new pictures
+    // $('#doggoContainer').append(`<img src="${doggo.message}">`)
+
+    // this approach replaces the current picture
+    doggoContainer.innerHTML = `<img alt="doggo" src="${doggo.message}">`
+    generateDoggoBtn.innerHTML = "Generate doggo"
+    $("#generateDoggoBtn").prop("disabled", false)
   }
 
   function fetchDoggoError(error){
@@ -87,15 +95,16 @@
   }
 
   function clickDoggoBtn(){
+    generateDoggoBtn.innerHTML = "Generating doggo..."
+    $("#generateDoggoBtn").prop("disabled", true)
 
     $.ajax({
       type: "GET",
       dataType: "json",
-      url: "https://dog.ceo/api/breeds/image/random",
+      url: doggoBreedURL,
       success: fetchDoggoSuccess,
       error: fetchDoggoError
     })
-    
   }
 
 
@@ -134,6 +143,40 @@
   //
 
   // TODO: your code goes here :)
+  let selectBreedDropdown = document.getElementById("selectBreedDropdown")
+
+  $( document ).ready(function() {
+    $.getJSON("https://dog.ceo/api/breeds/list/all", fetchDoggoListSuccess)})
+
+  function fetchDoggoListSuccess(doggoList){
+    
+    console.log("Doggo list was fetched successfully")
+    console.dir(doggoList)
+
+
+    function buildDoggoList(obj){
+      return `
+      <option value="${obj}">${obj}</option>
+      `
+    }
+    
+    let doggoListValues = Object.keys(doggoList.message).map(buildDoggoList).join("")
+    let doggoListValuesHTML = (selectBreedDropdown.innerHTML = `<option value="random">random</option>` + doggoListValues)
+    return doggoListValuesHTML
+  }
+
+  let doggoBreedURL = "https://dog.ceo/api/breeds/image/random"
+
+  $("select").on("change", function(){
+
+    if (this.value === "random"){
+      doggoBreedURL = "https://dog.ceo/api/breeds/image/random"
+    }
+    else {
+    doggoBreedURL = `https://dog.ceo/api/breed/${this.value}/images/random`
+    }
+  })
+
 
   //
   // Excellent work!
