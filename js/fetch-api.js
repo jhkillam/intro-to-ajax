@@ -92,6 +92,48 @@
   //
 
   // TODO: your code goes here :)
+  
+  var myHeaders = new Headers({
+    'x-api-key': '6a665bbc-959d-422f-abdf-919890680373',
+    'Content-Type': 'application/json'
+  });
+
+  const generateCatBtnEl = document.getElementById('generateCatBtn')
+  generateCatBtnEl.addEventListener('click', clickCatBtn)
+
+  function clickCatBtn(){
+    console.info('Fetching cat picture')
+    generateCatBtnEl.innerHTML = "Generating cat..."
+    $("#generateCatBtn").prop("disabled", true)
+    fetch('https://api.thecatapi.com/v1/images/search?size=full&mime_types=jpg&format=json&has_breeds=1&order=RANDOM&page=0&limit=1', {
+      // headers: myHeaders
+    })
+      .then(catResponseTxt)
+      .then(setCatPic)
+      .then(reenableCatBtn)
+  }
+
+  function catResponseTxt(response) {
+    console.log('AJAX request finished, this is the callback from the first promise object')
+    return response.json()
+  }
+
+  function setCatPic(ajaxResponse) {
+    console.log('ajax response:')
+    console.log(ajaxResponse)
+    console.log('~~~~~~~~~~~')
+    const catContainerEl = document.getElementById('catContainer')
+    console.dir(ajaxResponse[0].url)
+    let catURL = ajaxResponse[0].url
+    Image
+    catContainerEl.innerHTML = `<img width="300" src="${catURL}">`
+  }
+
+  function reenableCatBtn() {
+    generateCatBtnEl.innerHTML = "Generate cat"
+    $("#generateCatBtn").prop("disabled", false)
+    console.log("cat generation complete!")
+  }
 
   //
   // What else can you build with your new AJAX knowledge?
@@ -116,3 +158,5 @@
   // Congratulations! You are now an AJAX master.
   //
 })()
+
+
