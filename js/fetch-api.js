@@ -106,7 +106,7 @@
     generateCatBtnEl.innerHTML = "Generating cat..."
     $("#generateCatBtn").prop("disabled", true)
     fetch('https://api.thecatapi.com/v1/images/search?size=full&mime_types=jpg&format=json&has_breeds=1&order=RANDOM&page=0&limit=1', {
-      // headers: myHeaders
+      headers: myHeaders
     })
       .then(catResponseTxt)
       .then(setCatPic)
