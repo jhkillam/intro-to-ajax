@@ -125,7 +125,6 @@
     const catContainerEl = document.getElementById('catContainer')
     console.dir(ajaxResponse[0].url)
     let catURL = ajaxResponse[0].url
-    Image
     catContainerEl.innerHTML = `<img width="500" src="${catURL}">`
   }
 
