@@ -126,7 +126,7 @@
     console.dir(ajaxResponse[0].url)
     let catURL = ajaxResponse[0].url
     Image
-    catContainerEl.innerHTML = `<img width="300" src="${catURL}">`
+    catContainerEl.innerHTML = `<img width="500" src="${catURL}">`
   }
 
   function reenableCatBtn() {
