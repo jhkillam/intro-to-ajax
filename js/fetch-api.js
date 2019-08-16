@@ -93,7 +93,7 @@
 
   // TODO: your code goes here :)
   
-  var myHeaders = new Headers({
+  var catHeaders = new Headers({
     'x-api-key': '6a665bbc-959d-422f-abdf-919890680373',
     'Content-Type': 'application/json'
   });
@@ -106,7 +106,7 @@
     generateCatBtnEl.innerHTML = "Generating cat..."
     $("#generateCatBtn").prop("disabled", true)
     fetch('https://api.thecatapi.com/v1/images/search?size=full&mime_types=jpg&format=json&has_breeds=1&order=RANDOM&page=0&limit=1', {
-      headers: myHeaders
+      headers: catHeaders
     })
       .then(catResponseTxt)
       .then(setCatPic)
@@ -149,6 +149,115 @@
   //
 
   // TODO: your code goes here :)
+
+  const catVsDogBtnEl = document.getElementById('catVsDogBtn')
+  catVsDogBtnEl.addEventListener('click', clickVsBtn)
+
+  const dogVsContainerEl = document.getElementById('dogVsContainer')
+  const catVsContainerEl = document.getElementById('catVsContainer')
+  const dogScoreEl = document.getElementById('dogScore')
+  const catScoreEl = document.getElementById('catScore')
+
+  var dogVotes = 0
+  var catVotes = 0
+
+  function clickVsBtn () {
+    console.log('clicked vs button, beginning fetch process...')
+    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    catVsDogBtnEl.innerHTML = "Generating images..."
+    $("#catVsDogBtn").prop("disabled", true)
+
+    let fetchDogPromise = fetchDog()
+    let fetchCatPromise = fetchCat()
+
+    Promise.all([fetchDogPromise, fetchCatPromise]).then(function(values) {
+      console.log(".then final promise array:")
+      console.log(values)
+      dogVsContainerEl.innerHTML = values[0]
+      catVsContainerEl.innerHTML = values[1]
+      const dogImageEl = document.getElementById('dogImage')
+      const catImageEl = document.getElementById('catImage')
+      dogImageEl.addEventListener('click', voteDog)
+      catImageEl.addEventListener('click', voteCat)
+      catVsDogBtnEl.innerHTML = "Generate new images"
+      $("#catVsDogBtn").prop("disabled", false)
+    })}
+
+    function voteDog() {
+      dogVotes++
+      dogScoreEl.innerHTML = dogVotes.toString()
+      catVsContainerEl.innerHTML = ""
+      setTimeout(function() {
+        dogVsContainerEl.innerHTML = ""
+      }, 2000)
+    }
+
+    function voteCat() {
+      catVotes++
+      catScoreEl.innerHTML = catVotes.toString()
+      dogVsContainerEl.innerHTML = ""
+      setTimeout(function() {
+        catVsContainerEl.innerHTML = ""
+      }, 2000)
+    }
+
+  function fetchDog () {
+    return fetch('https://dog.ceo/api/breeds/image/random')
+      .then(dogFetchResponse)
+      .then(dogFetchGetImageURL)
+      .then(buildDogImageHTML)
+  }
+
+  function dogFetchResponse (response) {
+    console.log('dog fetch request finished, this is the callback from the first promise object')
+    console.log(response)
+    return response.json()
+  }
+
+  function dogFetchGetImageURL (ajaxResponse) {
+    console.log('second dog promise object starting')
+    let dogImageURL = ajaxResponse.message
+    console.log("dog image url: " + dogImageURL)
+    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    return dogImageURL
+  }
+
+  function buildDogImageHTML (dogImageURL) {
+    let dogImageHTML = `
+    <img class="dogImage" id="dogImage" src="${dogImageURL}" alt="Dog image">
+    `
+    return dogImageHTML;
+  }
+
+  function fetchCat() {
+    return fetch('https://api.thecatapi.com/v1/images/search?size=full&mime_types=jpg&format=json&has_breeds=1&order=RANDOM&page=0&limit=1', {
+      headers: catHeaders
+    })
+      .then(catFetchResponse)
+      .then(catFetchGetImageURL)
+      .then(buildCatImageHTML)
+  }
+
+  function catFetchResponse (response) {
+    console.log('cat fetch request finished, this is the callback from the first promise object')
+    console.log('response')
+    return response.json()
+  }
+
+  function catFetchGetImageURL (ajaxResponse) {
+    console.log('second cat promise object starting')
+    let catImageURL = ajaxResponse[0].url
+    console.log(catImageURL)
+    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    return catImageURL
+  }
+
+  function buildCatImageHTML (catImageURL) {
+    let catImageHTML = `
+    <img class="catImage" id="catImage" src="${catImageURL}" alt="Cat image">    
+    `
+    return catImageHTML
+  }
 
   //
   // Be sure to check out the axios project for another example of a Promise-based

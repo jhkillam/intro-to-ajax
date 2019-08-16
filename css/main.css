@@ -9,3 +9,26 @@ h1 {
 #jumbotronContainer {
   margin-top: 20px;
 }
+
+.dogImage {
+  max-width: 100%;
+  height: auto
+}
+
+.catImage {
+  max-width: 100%;
+  height: auto
+}
+
+.vsContainer {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+#dogVsContainer {
+  flex: 1
+}
+
+#catVsContainer {
+  flex: 1
+}
