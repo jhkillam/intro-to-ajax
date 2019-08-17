@@ -80,11 +80,11 @@
     console.log("Doggo was fetched successfully")
     console.log(doggo)
 
-    // this approach continually adds new pictures
-    // $('#doggoContainer').append(`<img src="${doggo.message}">`)
+    // this approach continually adds new pictures at the top of the doggoContainer
+    $('#doggoContainer').prepend(`<img src="${doggo.message}">`)
 
     // this approach replaces the current picture
-    doggoContainer.innerHTML = `<img alt="doggo" src="${doggo.message}">`
+    // doggoContainer.innerHTML = `<img alt="doggo" src="${doggo.message}">`
     generateDoggoBtn.innerHTML = "Generate doggo"
     $("#generateDoggoBtn").prop("disabled", false)
   }
@@ -94,6 +94,7 @@
     console.log(error)
   }
 
+  // this fetches the picture when the generateDoggoBtn is clicked
   function clickDoggoBtn(){
     generateDoggoBtn.innerHTML = "Generating doggo..."
     $("#generateDoggoBtn").prop("disabled", true)
@@ -145,9 +146,12 @@
   // TODO: your code goes here :)
   let selectBreedDropdown = document.getElementById("selectBreedDropdown")
 
+  // this fetches the list of breeds
   $( document ).ready(function() {
     $.getJSON("https://dog.ceo/api/breeds/list/all", fetchDoggoListSuccess)})
 
+  // when the list is fetched successfully, the doggoListValues are passed to the dropdown option box
+  // this needs to be refactored, function buildDoggoList shouldn't be nested in here
   function fetchDoggoListSuccess(doggoList){
     
     console.log("Doggo list was fetched successfully")
@@ -167,8 +171,9 @@
 
   let doggoBreedURL = "https://dog.ceo/api/breeds/image/random"
 
+  // this sets the doggoBreedURL when the dropdown option box is changed
   $("select").on("change", function(){
-
+    console.log(this.value, 'is the "this" in the select')
     if (this.value === "random"){
       doggoBreedURL = "https://dog.ceo/api/breeds/image/random"
     }
